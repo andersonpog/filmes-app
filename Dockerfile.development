@@ -1,0 +1,22 @@
+# Usa uma imagem base que inclua o ambiente completo para desenvolvimento
+FROM ruby:3.2.0
+
+# Instala o cliente PostgreSQL (necessário para o pg gem) e Node.js
+RUN apt-get update -qq && \
+    apt-get install -y build-essential nodejs postgresql-client && \
+    rm -rf /var/lib/apt/lists/*
+
+# Define o diretório de trabalho onde o Rails irá rodar
+WORKDIR /rails
+
+# Define variáveis de ambiente
+ENV RAILS_ENV="development"
+
+# Copia e instala as gems
+COPY Gemfile Gemfile.lock ./
+# Instala as gems (incluindo as de development/test)
+RUN bundle install
+
+# O restante do código é montado via volume, tornando o desenvolvimento instantâneo.
+# O comando CMD será sobrescrito pelo docker-compose.yml
+CMD ["rails", "server", "-b", "0.0.0.0"]

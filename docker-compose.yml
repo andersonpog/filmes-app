@@ -1,0 +1,86 @@
+version: '3.8'
+services:
+  # Serviço do Banco de Dados PostgreSQL
+  db:
+    image: postgres:14-alpine
+    container_name: filmes_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      # Credenciais para o ambiente de desenvolvimento
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_password
+      POSTGRES_DB: filmes_app_development
+    ports:
+      - '5432:5432' # Opcional: Acessar o DB com ferramentas externas
+
+  # Serviço da Aplicação Rails
+  web:
+    # Usa o Dockerfile específico para desenvolvimento
+    build: 
+      context: .
+      dockerfile: Dockerfile.development 
+    
+    container_name: filmes_web
+    
+    # Inicia o servidor, garantindo que o PID antigo seja removido
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    
+    volumes:
+      - .:/rails # Monta o diretório do projeto no contêiner
+      - bundle_cache:/usr/local/bundle # Cache para instalação de gems
+      
+    ports:
+      - '3000:3000'
+      
+    depends_on:
+      - db
+      
+    environment:
+      RAILS_ENV: development
+      # Variáveis usadas no config/database.yml
+      DATABASE_HOST: db 
+      DATABASE_USER: app_user
+      DATABASE_PASSWORD: app_password
+      DATABASE_NAME: filmes_app_development
+      
+volumes:
+  postgres_data: # Persistência dos dados do PostgreSQL
+  bundle_cache: # Cache de gems para o Rails
+
+# version: '3.8'
+# services:
+#   # Serviço do Banco de Dados PostgreSQL
+#   db:
+#     image: postgres:14-alpine
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     environment:
+#       POSTGRES_USER: app_user
+#       POSTGRES_PASSWORD: app_password
+#       POSTGRES_DB: filmes_app_development
+#     ports:
+#       - '5432:5432' # Opcional, para acessar o DB de fora do Docker
+
+#   # Serviço da Aplicação Rails
+#   web:
+#     build: . # Busca as instruções no Dockerfile
+#     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+#     volumes:
+#       - .:/app
+#       # Cache para gems para builds mais rápidos
+#       - bundle_cache:/usr/local/bundle
+#     ports:
+#       - '3000:3000'
+#     depends_on:
+#       - db
+#     environment:
+#       RAILS_ENV: development
+#       DATABASE_HOST: db # O Docker Compose usa o nome do serviço como hostname
+#       DATABASE_USER: app_user
+#       DATABASE_PASSWORD: app_password
+#       DATABASE_NAME: filmes_app_development
+      
+# volumes:
+#   postgres_data:
+#   bundle_cache:
