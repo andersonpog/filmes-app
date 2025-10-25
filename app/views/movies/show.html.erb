@@ -1,40 +1,31 @@
 <p style="color: green"><%= notice %></p>
+<div style="margin-bottom: 20px;">
+  <h1><%= @movie.title %> (<%= @movie.release_year %>)</h1>
 
-<%= render @movie %>
+  <p>
+    <strong>Sinopse:</strong>
+    <%= @movie.synopsis %>
+  </p>
 
-<div>
-  <%= link_to "Edit this movie", edit_movie_path(@movie) %> |
-  <%= link_to "Back to movies", movies_path %>
+  <p>
+    <strong>Duração:</strong>
+    <%= @movie.duration %> minutos
+  </p>
 
-  <%= button_to "Destroy this movie", @movie, method: :delete %>
+  <p>
+    <strong>Diretor:</strong>
+    <%= @movie.director %>
+  </p>
 
-  <p style="color: green"><%= notice %></p>
+  <p>
+    <% if user_signed_in? && @movie.user == current_user %>
+      <%= link_to "Editar Filme", edit_movie_path(@movie) %> |
+      <%= button_to "Apagar Filme", @movie, method: :delete, data: { confirm: 'Tem certeza?' } %>
+    <% end %>
+  </p>
+</div>
 
-<h1><%= @movie.title %> (<%= @movie.release_year %>)</h1>
-
-<p>
-  <strong>Sinopse:</strong>
-  <%= @movie.synopsis %>
-</p>
-
-<p>
-  <strong>Duração:</strong>
-  <%= @movie.duration %> minutos
-</p>
-
-<p>
-  <strong>Diretor:</strong>
-  <%= @movie.director %>
-</p>
-
-<p>
-  <% if user_signed_in? && @movie.user == current_user %>
-    <%= link_to "Editar Filme", edit_movie_path(@movie) %> |
-    <%= button_to "Apagar Filme", @movie, method: :delete, data: { confirm: 'Tem certeza?' } %>
-  <% end %>
-</p>
-
-<br>
+<hr>
 
 <h2><%= @movie.comments.count %> Comentários</h2>
 
@@ -49,9 +40,9 @@
         <% end %>
       </strong>
       <small><%= time_ago_in_words(comment.created_at) %> atrás</small>
-
+      
       <p><%= comment.content %></p>
-
+      
       <% if user_signed_in? && comment.user == current_user %>
         <%= button_to 'Apagar', movie_comment_path(@movie, comment), method: :delete, data: { confirm: 'Tem certeza?' }, style: 'float: right;' %>
       <% end %>
@@ -65,8 +56,8 @@
 
 <%# O @comment foi inicializado no MoviesController#show %>
 <%= form_with(model: [@movie, @comment], local: true) do |form| %>
-
-  <%# Exibe erros de validação se houver (após um redirect com alert) %>
+  
+  <%# Exibe erros de validação se houver %>
   <% if @comment.errors.any? %>
     <div id="error_explanation" style="color: red;">
       <h2><%= pluralize(@comment.errors.count, "erro") %> impediu este comentário de ser salvo:</h2>
@@ -93,8 +84,6 @@
   <div class="actions">
     <%= form.submit "Postar Comentário" %>
   </div>
-<% end %>
-
+<% end %> 
 <br>
 <%= link_to "Voltar para a lista de filmes", movies_path %>
-</div>
