@@ -1,0 +1,100 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @movie %>
+
+<div>
+  <%= link_to "Edit this movie", edit_movie_path(@movie) %> |
+  <%= link_to "Back to movies", movies_path %>
+
+  <%= button_to "Destroy this movie", @movie, method: :delete %>
+
+  <p style="color: green"><%= notice %></p>
+
+<h1><%= @movie.title %> (<%= @movie.release_year %>)</h1>
+
+<p>
+  <strong>Sinopse:</strong>
+  <%= @movie.synopsis %>
+</p>
+
+<p>
+  <strong>Duração:</strong>
+  <%= @movie.duration %> minutos
+</p>
+
+<p>
+  <strong>Diretor:</strong>
+  <%= @movie.director %>
+</p>
+
+<p>
+  <% if user_signed_in? && @movie.user == current_user %>
+    <%= link_to "Editar Filme", edit_movie_path(@movie) %> |
+    <%= button_to "Apagar Filme", @movie, method: :delete, data: { confirm: 'Tem certeza?' } %>
+  <% end %>
+</p>
+
+<br>
+
+<h2><%= @movie.comments.count %> Comentários</h2>
+
+<div id="comments">
+  <% @comments.each do |comment| %>
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+      <strong>
+        <% if comment.user %>
+          <%= comment.user.email %> 
+        <% else %>
+          <%= comment.commenter_name %> (Anônimo)
+        <% end %>
+      </strong>
+      <small><%= time_ago_in_words(comment.created_at) %> atrás</small>
+
+      <p><%= comment.content %></p>
+
+      <% if user_signed_in? && comment.user == current_user %>
+        <%= button_to 'Apagar', movie_comment_path(@movie, comment), method: :delete, data: { confirm: 'Tem certeza?' }, style: 'float: right;' %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<br>
+
+<h3>Adicionar um novo comentário:</h3>
+
+<%# O @comment foi inicializado no MoviesController#show %>
+<%= form_with(model: [@movie, @comment], local: true) do |form| %>
+
+  <%# Exibe erros de validação se houver (após um redirect com alert) %>
+  <% if @comment.errors.any? %>
+    <div id="error_explanation" style="color: red;">
+      <h2><%= pluralize(@comment.errors.count, "erro") %> impediu este comentário de ser salvo:</h2>
+      <ul>
+        <% @comment.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% unless user_signed_in? %>
+    <div class="field">
+      <%= form.label :commenter_name, "Seu Nome (Anônimo)" %><br>
+      <%= form.text_field :commenter_name %>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :content, "Comentário" %><br>
+    <%= form.text_area :content, rows: 4 %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Postar Comentário" %>
+  </div>
+<% end %>
+
+<br>
+<%= link_to "Voltar para a lista de filmes", movies_path %>
+</div>

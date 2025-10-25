@@ -1,27 +1,61 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for(:title) || "App" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title>Filmes App</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+</head>
+<body>
 
-    <%= yield :head %>
+  <header style="background: #eee; padding: 10px; margin-bottom: 20px;">
+    <%= link_to "Home (Filmes)", root_path %> | 
+    
+    <% if user_signed_in? %>
+      Olá, <%= current_user.email %> |
+      <%= link_to 'Novo Filme', new_movie_path %> |
+      <%= link_to 'Editar Perfil', edit_user_registration_path %> |
+      <%= button_to 'Sair (Logout)', destroy_user_session_path, method: :delete %>
+    <% else %>
+      <%= link_to 'Cadastre-se', new_user_registration_path %> |
+      <%= link_to 'Entrar (Login)', new_user_session_path %>
+    <% end %>
+  </header>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+  <p class="notice" style="color: green; font-weight: bold;"><%= notice %></p>
+  <p class="alert" style="color: red; font-weight: bold;"><%= alert %></p>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-  </head>
-
-  <body>
+  <div class="container">
     <%= yield %>
+  </div>
   </body>
 </html>
+
+# <!DOCTYPE html>
+# <html>
+#   <head>
+#     <title><%= content_for(:title) || "App" %></title>
+#     <meta name="viewport" content="width=device-width,initial-scale=1">
+#     <meta name="apple-mobile-web-app-capable" content="yes">
+#     <meta name="mobile-web-app-capable" content="yes">
+#     <%= csrf_meta_tags %>
+#     <%= csp_meta_tag %>
+
+#     <%= yield :head %>
+
+#     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+#     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+#     <link rel="icon" href="/icon.png" type="image/png">
+#     <link rel="icon" href="/icon.svg" type="image/svg+xml">
+#     <link rel="apple-touch-icon" href="/icon.png">
+
+#     <%# Includes all stylesheet files in app/assets/stylesheets %>
+#     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+#   </head>
+
+#   <body>
+#       <p class="notice"><%= notice %></p>
+#       <p class="alert"><%= alert %></p>
+#     <%= yield %>
+#   </body>
+# </html>
