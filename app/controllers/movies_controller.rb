@@ -9,7 +9,7 @@ class MoviesController < ApplicationController
   # Área Pública: Listagem e Paginação
   def index
     # Paginação: 6 filmes por página, ordenado pelo default_scope (mais novo)
-    @pagy, @movies = pagy(Movie.all, items: 6) 
+    @pagy, @movies = pagy(Movie.all) 
   end
 
   # Área Pública: Detalhes do Filme

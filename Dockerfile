@@ -44,9 +44,10 @@ RUN bundle install && \
 # Copia código da aplicação
 COPY . .
 
+RUN chmod +x ./bin/rails
 # Precompila assets para produção (requer Node.js/Yarn/etc., que foram instalados acima)
 # SECRET_KEY_BASE_DUMMY evita erro durante o build (a chave real será injetada no Render)
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec ruby ./bin/rails assets:precompile
 
 
 # ----------------------------------------------------
@@ -57,6 +58,8 @@ FROM base
 # Copia os artefatos construídos: gems instaladas, código e assets compilados
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
+
+RUN chmod +x /rails/bin/rails
 
 # Entrypoint personalizado para rodar migrações ANTES do servidor iniciar
 # 1. Cria o script na pasta 'bin'

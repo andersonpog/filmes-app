@@ -1,16 +1,21 @@
 <p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Movies" %>
+<% content_for :title, "Filmes em Cartaz" %>
 
 <h1>Filmes</h1>
 
-<div id="movies">
-  <% @movies.each do |movie| %>
-    <%= render movie %>
-    <p>
-      <%= link_to "Show this movie", movie %>
-    </p>
-  <% end %>
-</div>
+<% @movies.each do |movie| %>
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
+      <h2><%= link_to movie.title, movie %></h2>
+      <p>Ano: <%= movie.release_year %></p>
+      <p><%= movie.synopsis.truncate(200) %></p>
+      <p>
+        <%= link_to "Ver Detalhes", movie, class: "button" %>
+      </p>
+    </div>
+<% end  %>
 
-<%= link_to "New movie", new_movie_path %>
+<%= pagy_nav(@pagy).html_safe %>
+
+<br>
+<%= link_to "Novo Filme", new_movie_path %>
