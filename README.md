@@ -2,7 +2,7 @@
 
 ## Descrição do Projeto
 
-O **Filmes App** é uma plataforma web desenvolvida em **Ruby on Rails** com **PostgreSQL** que simula um catálogo de filmes com funcionalidades de autenticação e interação. O projeto é totalmente dockerizado para garantir um ambiente de desenvolvimento portátil e consistente.
+Projeto desenvolvido como desafio de estágio para a Mainô. O **Filmes App** é uma plataforma web desenvolvida em **Ruby on Rails** com **PostgreSQL** que simula um catálogo de filmes com funcionalidades de autenticação e interação. O projeto é totalmente dockerizado para garantir um ambiente de desenvolvimento portátil e consistente.
 
 ### Funcionalidades Implementadas
 
@@ -27,7 +27,7 @@ Este guia pressupõe que você tenha o **Docker Desktop** (ou Docker Engine + Do
 Abra seu terminal e baixe o código-fonte digitando:
 
 ```bash
-git clone [URL_DO_SEU_REPOSITORIO]
+git clone https://github.com/andersonpog/filmes-app.git
 cd filmes-app
 ```
 ### 2. Rodar a aplicação
@@ -41,3 +41,11 @@ docker compose up -d web
 ```
 
 A plicação estará disponível por padrão em http://localhost:3000
+
+## 🌐 Hospedagem 
+
+O aplicativo está hospedado na plataforma Render pode ser acessado em 
+
+https://filmes-app.onrender.com/
+
+O primeiro acesso pode demorar um pouco devido ao servidor gratuito do render poder estar desativado por inatividade.
