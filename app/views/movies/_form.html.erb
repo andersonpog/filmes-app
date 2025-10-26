@@ -1,8 +1,7 @@
 <%= form_with(model: movie) do |form| %>
   <% if movie.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(movie.errors.count, "error") %> prohibited this movie from being saved:</h2>
-
+      <h2><%= pluralize(movie.errors.count, "erro") %> impediu este filme de ser salvo:</h2>
       <ul>
         <% movie.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -12,31 +11,37 @@
   <% end %>
 
   <div>
-    <%= form.label :Título, style: "display: block" %>
+    <%# CORREÇÃO: Título - Deve ser uma string para o texto %>
+    <%= form.label :title, "Título", style: "display: block" %>
     <%= form.text_field :title %>
   </div>
-
+  
   <div>
-    <%= form.label :Sinopse, style: "display: block" %>
-    <%= form.textarea :synopsis %>
+    <%# CORREÇÃO: Sinopse - Deve ser uma string para o texto %>
+    <%= form.label :synopsis, "Sinopse", style: "display: block" %>
+    <%= form.text_area :synopsis %>
   </div>
-
+  
   <div>
+    <%# CORREÇÃO: Ano de Lançamento - Passado como string %>
     <%= form.label :release_year, "Ano de Lançamento", style: "display: block" %>
     <%= form.number_field :release_year %>
   </div>
-
+  
   <div>
-    <%= form.label :Duração, style: "display: block" %>
+    <%# CORREÇÃO: Duração - Passado como string %>
+    <%= form.label :duration, "Duração", style: "display: block" %>
     <%= form.number_field :duration %>
   </div>
-
+  
   <div>
-    <%= form.label :Diretor, style: "display: block" %>
+    <%# CORREÇÃO: Diretor - Passado como string %>
+    <%= form.label :director, "Diretor", style: "display: block" %>
     <%= form.text_field :director %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="actions">
+    <%# CORREÇÃO: Altera o texto padrão do botão submit para "Cadastrar Filme" %>
+    <%= form.submit "Cadastrar Filme" %>
   </div>
 <% end %>

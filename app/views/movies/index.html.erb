@@ -1,21 +1,82 @@
-<p style="color: green"><%= notice %></p>
 
 <% content_for :title, "Filmes em Cartaz" %>
 
 <h1>Filmes</h1>
 
-<% @movies.each do |movie| %>
-    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
-      <h2><%= link_to movie.title, movie %></h2>
-      <p>Ano: <%= movie.release_year %></p>
-      <p><%= movie.synopsis.truncate(200) %></p>
-      <p>
-        <%= link_to "Ver Detalhes", movie, class: "button" %>
-      </p>
-    </div>
-<% end  %>
+<%# ADICIONA NAVEGAÇÃO PAGY: Usa a classe pagy-nav e a tag de saída segura %>
+<%== pagy_nav(@pagy, classes: 'pagy-nav') if @pagy.pages > 1 %>
 
-<%= pagy_nav(@pagy).html_safe %>
+<div id="movies" class="movie-list">
+  <% @movies.each do |movie| %>
+    <div class="movie-card">
+      <h2><%= link_to movie.title, movie %> <span class="year">(<%= movie.release_year %>)</span></h2>
+      
+      <div class="movie-meta">
+        <p>Diretor: <strong><%= movie.director %></strong></p>
+      </div>
+      
+      <p class="movie-synopsis"><%= movie.synopsis.truncate(200) %></p>
+      
+      <div class="movie-actions">
+        <%# Usando o botão primário estilizado %>
+        <%= link_to "Ver Detalhes", movie, class: "button primary-button" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%# ADICIONA NAVEGAÇÃO PAGY NO FINAL: Usa a tag de saída segura %>
+<%== pagy_nav(@pagy, classes: 'pagy-nav') if @pagy.pages > 1 %>
 
 <br>
-<%= link_to "Novo Filme", new_movie_path %>
+<%= link_to "Novo Filme", new_movie_path, class: "button" %>
+
+<style>
+/* Estilos Específicos para a Lista de Filmes */
+.movie-card {
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.movie-card h2 {
+    color: #1f4068;
+    margin-top: 0;
+    font-size: 1.5em;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.movie-synopsis {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.year {
+    font-size: 0.8em;
+    color: #aaa;
+    font-weight: normal;
+}
+
+.primary-button {
+    background-color: #4CAF50; /* Verde Principal */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    box-shadow: 0 4px #388e3c; /* Sombra para efeito 3D */
+}
+.primary-button:active {
+    background-color: #388e3c;
+    box-shadow: 0 2px #388e3c;
+    transform: translateY(2px);
+}
+</style>

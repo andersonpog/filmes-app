@@ -1,12 +1,19 @@
-<% content_for :title, "Editing movie" %>
+<% content_for :title, "Editar Filme" %>
 
-<h1>Editing movie</h1>
+<div class="header-container">
+  <h1>Editar Filme: <%= @movie.title %></h1>
+</div>
 
-<%= render "form", movie: @movie %>
+<div class="form-container">
+  <%= render "form", movie: @movie %>
+</div>
 
 <br>
 
-<div>
-  <%= link_to "Show this movie", @movie %> |
-  <%= link_to "Back to movies", movies_path %>
+<div class="actions" style="display: flex; gap: 10px;">
+  <%# Link corrigido e estilizado para voltar para a view de detalhes %>
+  <%= link_to "Voltar para Visualização", @movie, class: "button" %> 
+  
+  <%# Link corrigido e estilizado para voltar para a lista %>
+  <%= link_to "Voltar para a Lista de Filmes", movies_path, class: "button delete-button" %>
 </div>

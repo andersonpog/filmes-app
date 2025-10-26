@@ -1,11 +1,44 @@
-<% content_for :title, "New movie" %>
 
-<h1>New movie</h1>
+<% content_for :title, "Novo Filme" %>
 
-<%= render "form", movie: @movie %>
+<div class="container-small">
+  <h1>Novo Filme</h1>
 
-<br>
+  <%# Renderiza o partial do formulário (_form.html.erb) %>
+  <%= render "form", movie: @movie %> 
 
-<div>
-  <%= link_to "Back to movies", movies_path %>
+  <br>
+
+  <div>
+    <%= link_to "Voltar para a lista de filmes", movies_path, class: "button primary-button" %>
+  </div>
 </div>
+
+<style>
+/* Estilo específico para centralizar o formulário de novo filme */
+.container-small {
+    max-width: 600px; /* Limite o formulário para melhor leitura */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.container-small h1 {
+    color: #1f4068;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Garante que o botão de voltar use o estilo primário */
+.primary-button {
+    background-color: #1f4068;
+    box-shadow: 0 4px #1a3658;
+}
+.primary-button:active {
+    background-color: #1a3658;
+    box-shadow: 0 2px #1a3658;
+}
+</style>

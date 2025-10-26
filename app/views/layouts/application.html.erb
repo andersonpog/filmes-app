@@ -2,32 +2,171 @@
 <html>
 <head>
   <title>Filmes App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
+  
+  <style>
+    /* Estilos de Layout Geral */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      color: #1f4068;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* Estilos de Navegação */
+    header {
+      background: #1f4068;
+      color: white;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    header a, header button {
+      color: white;
+      text-decoration: none;
+      margin: 0 8px;
+      padding: 5px 10px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    header a:hover, header button:hover {
+      background-color: #345c8c;
+    }
+    header strong {
+        font-weight: 600;
+        margin-left: 15px;
+    }
+
+    /* Estilo de Botões */
+    .button, button, input[type="submit"] {
+      background-color: #4CAF50; /* Verde Principal */
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      display: inline-block;
+      text-decoration: none;
+      box-shadow: 0 4px #388e3c; /* Sombra para efeito 3D */
+    }
+
+    .button:active, button:active, input[type="submit"]:active {
+      background-color: #388e3c;
+      box-shadow: 0 2px #388e3c;
+      transform: translateY(2px);
+    }
+    
+    .delete-button {
+      background-color: #f44336; /* Vermelho para ações destrutivas */
+      box-shadow: 0 4px #d32f2f;
+    }
+    .delete-button:active {
+      background-color: #d32f2f;
+      box-shadow: 0 2px #d32f2f;
+    }
+
+    /* Formulários e Campos */
+    input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 15px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    .field label {
+        font-weight: bold;
+        color: #1f4068;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    /* Estilo para mensagens flash */
+    .notice { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 10px; border-radius: 4px; margin-bottom: 15px; }
+    .alert { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; margin-bottom: 15px; }
+    
+    /* Estilo de Paginação (Pagy) */
+    .pagy-nav {
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
+      list-style: none;
+    }
+    .pagy-nav a, .pagy-nav span {
+        margin: 0 5px;
+        padding: 8px 12px;
+        border: 1px solid #1f4068;
+        text-decoration: none;
+        color: #1f4068;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+    .pagy-nav a:hover {
+        background-color: #f0f0f0;
+    }
+    .pagy-nav span.page.active {
+        background-color: #1f4068;
+        color: white;
+        border-color: #1f4068;
+    }
+    
+  </style>
+  
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
 </head>
 <body>
 
-  <header style="background: #eee; padding: 10px; margin-bottom: 20px;">
+  <!-- CABEÇALHO E NAVEGAÇÃO -->
+  <header>
     <%= link_to "Home (Filmes)", root_path %> | 
     
     <% if user_signed_in? %>
-      Olá, <%= current_user.email %> |
-      <%= link_to 'Novo Filme', new_movie_path %> |
-      <%= link_to 'Editar Perfil', edit_user_registration_path %> |
-      <%= button_to 'Sair (Logout)', destroy_user_session_path, method: :delete %>
+      <strong>Olá, <%= current_user.email %></strong> |
+      <%= link_to 'Novo Filme', new_movie_path %> 
+      <%= link_to 'Editar Perfil', edit_user_registration_path %> 
+      <%# Adicionando a classe delete-button ao botão de logout %>
+      <%= button_to 'Sair (Logout)', destroy_user_session_path, method: :delete, class: 'delete-button' %>
     <% else %>
-      <%= link_to 'Cadastre-se', new_user_registration_path %> |
+      <%= link_to 'Cadastre-se', new_user_registration_path %> 
       <%= link_to 'Entrar (Login)', new_user_session_path %>
     <% end %>
   </header>
 
-  <p class="notice" style="color: green; font-weight: bold;"><%= notice %></p>
-  <p class="alert" style="color: red; font-weight: bold;"><%= alert %></p>
-
   <div class="container">
+    <% if notice %>
+      <p class="notice"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+      <p class="alert"><%= alert %></p>
+    <% end %>
+
     <%= yield %>
   </div>
-  </body>
+
+</body>
 </html>
-
-
